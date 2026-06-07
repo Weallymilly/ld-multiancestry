@@ -219,3 +219,23 @@ __marimo__/
 
 # Mac
 .DS_Store
+
+#Genomic Data
+data/1kg/*.vcf.gz
+data/1kg/*.vcf.gz.tbi
+data/1kg/*.bcf
+data/1kg/*.bcf.csi
+data/1kg/*.cram
+data/1kg/*.bam
+data/1kg/*.bam.bai
+data/1kg/download.log
+
+#Processed intermediate files
+data/processed/
+data/raw/
+
+#Resuts
+results/
+
+#Notebooks
+*.ipynb

@@ -1,12 +1,13 @@
 # IMPACT: Genomic Annotation of Cell-State-Specific Regulatory Elements Inferred from the Epigenome of Bound Transcription Factors
-* DOI: 10.1016/j.ajhg.2019.03.012 * 
+** DOI: 10.1016/j.ajhg.2019.03.012 ** 
+** Read:** June 2, 2026
 
-## Core Claim
+## 1. Core Claim
 The IMPACT model provides a means of functional annotation of cell-state specific regulatory elements with epigenomic footprint and transcription factor (TF) binding as inputs. The key methodological insight is the incorporation of epigenomic information as features while retaining interpretability of weights in an elastic net regularization model. Importantly, IMPACT provides insight to disease mechanism by annotating SNPs with a functional prior probability: for example, "top 5% of CD4+ Treg IMPACT regulatory elements capture 85.7% of RA h2", where "the average RA h2 captured by compared CD4+ T histone marks is 42.3%" - IMPACT-annotated elements are highly enriched for trait heritability in the relevant cell type. 
 
-## Methods
+## 2. Methods
 IMPACT is trained on confirmed TF-bound and unbound motif instances from ChIP-seq experiments with chromatin states taken as features. The IMPACT score is a predicted probability that the motif is an active, cell-state specific regulatory element. The model has a nucleotide resolution, scoring each base position in the motif. Epigenetic information such as chromatin states and histone modifications are inputs to IMPACT and are obtained experimentally, using ChIP sequencing, open chromatin, and histone mark occupancy assays: thus, a limitation of this method is the scarcity of experimental data. The role of linkage-disequilibrium (LD) resides in the stratified-LD score regression (S-LDSC) model that is used as a means of quantifying trait heritability produced by the IMPACT model's annotations, accounting for inflated estimated chi-squared values for SNPs with many LD partners. The LD function $l(j,c)$ captures the total amount of genetic linkage of an SNP in annotation $c$: for SNPs in high LD with each other that also have high IMPACT scores,$l(j,c)$ will be large, allowing the model to attribute the heritability signal to the annotation rather than each individual SNP. $\tau_{c}^{*}$ is the normalized $\tau_{c}$ (per SNP contribution) by the standard deviation of annotation $c$ and the per-SNP heritability, producing a dimensionless enrichment score comparable across annotations and traits. 
 
-## Relevance to my project
+## 3. Relevance to my project
 S-LDSC requires pre-computed LD scores as input, derived from a reference panel. This study computed these using EUR ans EAS reference panels from the 1000 Genomes Project for both EUR and EAS GWAS traits. For EUR LD scores, 659 samples were used; for EAS LD scores, 105 samples were used. The EAS panel is substaintially smaller, producing noisier $l(j,c)$ estimates and wider confidence intervals for $\tau_{c}^{*}$. A larger and more carefully computed EAS LD matrix would reduce this sampling variance, yielding a more precise $\tau_{c}^{*}$ estimate and more reliable annotation in non-European populations.
 
