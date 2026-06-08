@@ -36,3 +36,8 @@ pangoLEARN is a machine-learning approach that labels new samples by lineage bas
 
 ## 8. Connection to My Project
 The engineering philosophy of this paper is to keep data lean and easy to work with: memory quickly becomes a bottleneck in bioinformatics problems. Thus, often, the core issue is knowing what information is relevant and pruning for it. MAT achieves this by omitting data that the placement algorithm will not need to read. The "hardware-software co-design" philosophy of the Turakhia lab is made evident to me through UShER: any real-world application of software must account for physical bottlenecks such as compute or memory as the purpose of developing these tools or infrastructure is to solve real problems. MAT is a data structure design that enables cache fit in CPUs - a realization of hardware situation that must be exploited for speed. This has inspired me to compare naive, NumPy, PyTorch CPU, and CUDA implementations. Reading UShER shaped how I designed my benchmark because it points out, despite the tech-space investing massively in GPUs and advanced hardware, clever utilization of existing hardware is what really needs to be studied and improved.
+
+## 9. Running UShER on example SARS-CoV-2 data
+- I produced Mutation Annotated Tree from the example vcf file. 
+- I used UShER to analyze the mutation path of the new samples, showing that UShER places new samples at positions with least additional mutations to explain - maximum parsimony. 
+- I see how MAT precomputes mutation accumulation per branch and stores that information so that full alignment isn't needed when adding new samples.
