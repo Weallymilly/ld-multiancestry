@@ -222,7 +222,7 @@ __marimo__/
 
 #Genomic Data
 data/1kg/*.vcf.gz
-data/1kg/*.vcf.gz.tbi
+data/1kg/*.vcf.gz.aria2
 data/1kg/*.bcf
 data/1kg/*.bcf.csi
 data/1kg/*.cram
