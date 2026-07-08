@@ -14,6 +14,7 @@ dependencies:
   - scikit-learn
   - jupyter
   - pyyaml
+  - pytest
   - pip
   - pip:
       - torch
