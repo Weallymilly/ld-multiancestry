@@ -41,7 +41,10 @@ print(G_fixed)
 G_std = G_fixed/stds[:,np.newaxis]
 
 print(G_std)
+#Calculating the correlation between variant i and variant j
+#The formula being the dot product of row i in G_std and row j in G_std.T divided by n-1
 print(G_std @ G_std.T/ (len(G[1])-1))
 
+#Verifying with built-in numpy operation
 print(np.corrcoef(G))
 
