@@ -228,6 +228,9 @@ data/1kg/*.bcf.csi
 data/1kg/*.cram
 data/1kg/*.bam
 data/1kg/*.bam.bai
+data/1kg/*.tbi
+data/1kg/eas_samples.txt
+data/1kg/eur_samples.txt
 data/1kg/download.log
 
 #Processed intermediate files

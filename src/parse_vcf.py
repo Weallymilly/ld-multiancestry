@@ -75,8 +75,16 @@ def impute_mean(G):
 
 
 if __name__ == "__main__":
-    G, variant_ids, sample_ids = parse_vcf_raw("data/1kg/chr11_phased.vcf.gz")
+    vcf_path = "data/1kg/fads_EUR.vcf.gz"
+    G, variant_ids, sample_ids = parse_vcf_raw(vcf_path)
 
     print("Matrix shape:", G.shape)
-    print("First variant position:", variant_ids[0])
-    print("First variant genotypes:", G[0][:])
+
+    missingness = compute_missingness(G)
+    maf = compute_maf(G)
+    G_filtered, variant_ids_filtered = filter_variants(G, variant_ids, missingness, maf)
+    G_imputed = impute_mean(G_filtered)
+
+    print("Final imputed matrix shape:", G_imputed.shape)
+    print("Any NaN remaining:", np.isnan(G_imputed).any())
+
