@@ -85,6 +85,9 @@ if __name__ == "__main__":
     G_filtered, variant_ids_filtered = filter_variants(G, variant_ids, missingness, maf)
     G_imputed = impute_mean(G_filtered)
 
+    np.save("data/processed/fads_EUR_G_imputed.npy", G_imputed)
+    np.save("data/processed/fads_EUR_variant_ids.npy", variant_ids_filtered)
+
     print("Final imputed matrix shape:", G_imputed.shape)
     print("Any NaN remaining:", np.isnan(G_imputed).any())
 

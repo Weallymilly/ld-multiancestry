@@ -1,11 +1,5 @@
 import numpy as np
 
-G = np.array([[0, 1, 2],
-              [0, 0, 1],
-              [1, 1, 2],
-              [2, 0, 0],
-              [1, 2, 1]])
-
 def ld_numpy(G):
 
     means = G.mean(axis = 1)
