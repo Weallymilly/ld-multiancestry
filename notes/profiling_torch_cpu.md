@@ -1,0 +1,12 @@
+# Profiling Results from the PyTorch CPU approach
+**Date: July 17, 2026
+
+## Main Points
+
+The torch CPU function completed the same task - computing correlation from a 200 sample x 200 variant random, unseeded matrix - in 0.010 seconds, with only 22 function calls, at 15 threads - same number of threads used by numpy. Looking at the function call number alone, I notice that a vectorized approach reduces Python overhead by reducing the time spent on calling functions. The computation function ld_torch_computation took 0.003 seconds in self-time and 0.010 in cumulative time, torch.tensor 0.003 in self-time, torch.mean 0.003, and torch.std 0.001 (values subject to rounding error). This shows that ld_torch_computation ties torch.tensor and torch.mean as the most time consuming process. Due to the function-level granularity of cProfile, I couldn't identify whether the matrix multiplication is the most dominant time factor in this process. Nevertheless, the presence of torch.tensor, torch.C._set_grad_enabled and other built-in functions reveal the per-call overhead slowing the process down. 
+
+These findings are supported by my Fig1 v2, where PyTorch CPU actually underperforms the numpy approach in small window sizes of <=1000; at larger window sizes requiring more complex matmuls, the advantages of parallel computing surfaces. At 8 threads, however, PyTorch matches numpy's speed on almost all window sizes, as shown in Fig1 v1, yet struggling more on larger window sizes (1000,2000,5000). This shows that parallelization and per-call overhead is a trade-off in similar computational problems, and that parallelization proves to be more advantageous when it is more fully utilized at larger window sizes.
+
+torch.tensor, however, scales linearly with input size, producing a less noticeable overhead at larger window sizes. 
+
+Accordingly, I hypothesize that at even larger variant windows, running Pytorch on CUDA architecture will outperform the numpy approach. GPU allows for more parrallel computing, the benefits of which become more evident at larger window sizes. Tensor cores on NVIDIA GPUs are specialized for matrix computations on top of being able to utilize VRAM to load the data; CPUs, on the other hand, experiences a memory bottleneck from both RAM size, RAM speed, and cache size. 

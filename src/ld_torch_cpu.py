@@ -13,7 +13,7 @@ def ld_torch_computation(G):
 
     return ld_matrix
 
-def ld_torch_cpu(G, num_threads = 8):
+def ld_torch_cpu(G, num_threads = 15):
     torch.set_num_threads(num_threads)
     return ld_torch_computation(G)
 

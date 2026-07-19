@@ -65,6 +65,6 @@ if __name__ == "__main__":
     plt.ylabel('runtime (seconds)')
     plt.title("LD Computation Runtime: Naive vs. NumPy vs. PyTorch_CPU (log-log)", fontdict={'size': 8})
 
-    plt.savefig("figs/fig1_speedup_curves.png", dpi=300, bbox_inches='tight')
+    plt.savefig("figs/fig1_speedup_curves_v2_15t.png", dpi=300, bbox_inches='tight')
 
     result_table.to_csv("results/numpy_vs_naive_vs_torchcpu.csv")
