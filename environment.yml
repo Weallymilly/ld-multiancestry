@@ -15,7 +15,7 @@ dependencies:
   - jupyter
   - pyyaml
   - pytest
+  - pytorch
   - pip
   - pip:
-      - torch
       - cyvcf2

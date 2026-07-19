@@ -1,6 +1,7 @@
 import time, numpy as np, pandas as pd, matplotlib.pyplot as plt, seaborn as sns
 from ld_numpy import ld_numpy
 from ld_naive import ld_naive
+from ld_torch_cpu import ld_torch_cpu, ld_torch_computation
 
 #Use sample size of ~633 matching 633 from EUR
 
@@ -50,17 +51,20 @@ def benchmark(ld_func, window_sizes, n_samples, n_reps = 3):
 if __name__ == "__main__":
     window_sizes = [100, 200, 500, 1000, 2000, 5000]
     n_samples = 600
+
+    df_torch_cpu = benchmark(ld_torch_cpu, window_sizes, n_samples)
     df_numpy = benchmark(ld_numpy, window_sizes, n_samples)
     df_naive = benchmark(ld_naive, window_sizes, n_samples, n_reps=1)
 
-    result_table = pd.concat([df_naive, df_numpy], ignore_index=True)
+
+    result_table = pd.concat([df_naive, df_numpy, df_torch_cpu], ignore_index=True)
 
     sns.lineplot(data=result_table, x="n_variants", y="elapsed_time", hue="implementation", marker='o')
     plt.xscale('log')
     plt.yscale('log')
     plt.ylabel('runtime (seconds)')
-    plt.title("LD Computation Runtime: Naive vs. NumPy (log-log)")
+    plt.title("LD Computation Runtime: Naive vs. NumPy vs. PyTorch_CPU (log-log)", fontdict={'size': 8})
 
     plt.savefig("figs/fig1_speedup_curves.png", dpi=300, bbox_inches='tight')
 
-    result_table.to_csv("results/numpy_vs_naive.csv")
+    result_table.to_csv("results/numpy_vs_naive_vs_torchcpu.csv")
