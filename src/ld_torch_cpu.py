@@ -2,7 +2,7 @@ import torch, numpy as np
 
 def ld_torch_computation(G):
 
-    with torch.no_grad():
+    with torch.no_grad(): #disables gradient calculation
         G = torch.tensor(G, dtype=float)
 
         means = torch.mean(G, dim = 1)

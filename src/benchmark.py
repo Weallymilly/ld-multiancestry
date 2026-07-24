@@ -1,7 +1,8 @@
 import time, numpy as np, pandas as pd, matplotlib.pyplot as plt, seaborn as sns
 from ld_numpy import ld_numpy
 from ld_naive import ld_naive
-from ld_torch_cpu import ld_torch_cpu, ld_torch_computation
+from ld_torch_cpu import ld_torch_cpu
+from ld_torch_gpu import ld_torch_gpu
 
 #Use sample size of ~633 matching 633 from EUR
 
@@ -49,22 +50,30 @@ def benchmark(ld_func, window_sizes, n_samples, n_reps = 3):
     return df.reset_index()
 
 if __name__ == "__main__":
+
+    #Giving CUDA a warmp-up run before benchmarking
+    small_G = np.random.randint(0,3,size = (50, 50))
+    ld_torch_gpu(small_G)
+
+    #Starting the actual benchmarking
     window_sizes = [100, 200, 500, 1000, 2000, 5000]
     n_samples = 600
 
+    df_gpu = benchmark(ld_torch_gpu, window_sizes, n_samples)
     df_torch_cpu = benchmark(ld_torch_cpu, window_sizes, n_samples)
     df_numpy = benchmark(ld_numpy, window_sizes, n_samples)
     df_naive = benchmark(ld_naive, window_sizes, n_samples, n_reps=1)
 
 
-    result_table = pd.concat([df_naive, df_numpy, df_torch_cpu], ignore_index=True)
+    result_table = pd.concat([df_naive, df_numpy, df_torch_cpu, df_gpu], ignore_index=True)
 
     sns.lineplot(data=result_table, x="n_variants", y="elapsed_time", hue="implementation", marker='o')
     plt.xscale('log')
     plt.yscale('log')
     plt.ylabel('runtime (seconds)')
-    plt.title("LD Computation Runtime: Naive vs. NumPy vs. PyTorch_CPU (log-log)", fontdict={'size': 8})
+    plt.title("LD Computation Runtime: Naive vs. NumPy vs. PyTorch_CPU vs. GPU (log-log)", fontdict={'size': 8})
 
-    plt.savefig("figs/fig1_speedup_curves_v2_15t.png", dpi=300, bbox_inches='tight')
+    plt.savefig("figs/fig1_speedup_curves_v3_gpu.png", dpi=300, bbox_inches='tight')
+    #The GPU run is done with ld_torch_cpu and ld_numpy running at 15 threads
 
-    result_table.to_csv("results/numpy_vs_naive_vs_torchcpu.csv")
+    result_table.to_csv("results/all_vs_gpu.csv")
