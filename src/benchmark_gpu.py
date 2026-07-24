@@ -28,8 +28,6 @@ def benchmark_gpu(ld_func, window_sizes, n_samples, n_reps = 3):
             torch.cuda.empty_cache()
             break
 
-        torch.cuda.empty_cache()
-
     df = pd.DataFrame(results)
     df = df.groupby(["implementation","n_variants"])["elapsed_time"].min()
 
