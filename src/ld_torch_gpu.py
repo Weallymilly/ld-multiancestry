@@ -7,6 +7,9 @@ def ld_torch_gpu(G,device = None):
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+        if device.type == "cuda":
+            print("Using CUDA")
+
         g_GPU = G.to(device)
 
         means = torch.mean(g_GPU, dim = 1)
