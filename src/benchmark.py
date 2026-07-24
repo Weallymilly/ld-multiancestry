@@ -1,4 +1,5 @@
 import time, numpy as np, pandas as pd, matplotlib.pyplot as plt, seaborn as sns
+import torch
 from ld_numpy import ld_numpy
 from ld_naive import ld_naive
 from ld_torch_cpu import ld_torch_cpu
@@ -50,6 +51,9 @@ def benchmark(ld_func, window_sizes, n_samples, n_reps = 3):
     return df.reset_index()
 
 if __name__ == "__main__":
+    
+    if torch.cuda.is_available():
+        print("CUDA is available. Running GPU benchmark.")
 
     #Giving CUDA a warmp-up run before benchmarking
     small_G = np.random.randint(0,3,size = (50, 50))
