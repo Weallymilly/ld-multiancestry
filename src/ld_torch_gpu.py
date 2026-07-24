@@ -21,4 +21,4 @@ def ld_torch_gpu(G,device = None):
         if device.type == "cuda":
             torch.cuda.synchronize()
 
-    return ld_matrix.cpu()
+    return ld_matrix
