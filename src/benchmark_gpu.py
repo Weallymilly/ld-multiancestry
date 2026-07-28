@@ -53,6 +53,11 @@ if __name__ == "__main__":
 
     df_gpu = decomposed_benchmark(window_sizes, n_samples)
 
+    stage_sum = df_gpu[['transfer_in_time', 'compute_time', 'transfer_out_time']].sum(axis=1)
+    is_correct = np.isclose(stage_sum, df_gpu['total_time'], rtol=1e-2).all()
+
+    print(f"Do the decomposed times sum to the total time? {is_correct}")
+
     for col in ["transfer_in_time", "compute_time", "transfer_out_time"]:
         plt.plot(df_gpu['n_variants'], df_gpu[col], label = col)
 
@@ -62,8 +67,22 @@ if __name__ == "__main__":
     plt.title("Decomposed GPU runtime (log-log)", fontdict={'size': 8})
     plt.legend()
 
-    plt.show()
+    plt.savefig("figs/fig3_gpu_decomposed.png", dpi=300, bbox_inches='tight')
 
-    #plt.savefig("figs/fig2_gpu_large_n.png", dpi=300, bbox_inches='tight')
+    y_cols = ['transfer_in_time', 'compute_time', 'transfer_out_time']
+    df_percent = df_gpu[y_cols].div(df_gpu["total_time"], axis=0) * 100
 
-    #df_gpu.to_csv("results/gpu_large_n.csv")
+    df_percent.index = df_gpu["n_variants"]
+
+    ax = df_percent.plot(
+        x="n_variants",
+        y= y_cols,
+        kind='bar',
+        stacked=True,
+        ylabel="Percentage of total time",
+        title="Stacked Contributions to Total"
+    )
+
+    plt.savefig("figs/fig4_gpu_dec_stacked.png", dpi=300, bbox_inches='tight')
+
+    df_gpu.to_csv("results/gpu_decomposed.csv")

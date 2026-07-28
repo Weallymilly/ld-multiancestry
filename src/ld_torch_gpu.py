@@ -21,7 +21,7 @@ def ld_torch_gpu(G,device = None):
         if device.type == "cuda":
             torch.cuda.synchronize()
 
-    return ld_matrix
+    return ld_matrix.cpu()
 
 def time_decomposed(G):
     device = torch.device('cuda')
