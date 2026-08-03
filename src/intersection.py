@@ -14,7 +14,7 @@ def find_shared_variant_ids():
 
     #drops multiallelic sites since input ID dataset doesn't preserve nature of alleles
 
-    shared_ids, idx_eas, idx_eur = np.intersect1d(single_eas, single_eur, return_indices=True)
+    shared_ids= np.intersect1d(single_eas, single_eur)
     idx_eas = np.nonzero(np.isin(EAS, shared_ids))[0]
     idx_eur = np.nonzero(np.isin(EUR, shared_ids))[0]
 
@@ -25,4 +25,8 @@ def find_shared_variant_ids():
 
 if __name__ == "__main__":
     shared_ids, idx_eas, idx_eur = find_shared_variant_ids()
+
+    np.save("data/processed/fads_shared_variant_ids.npy", shared_ids)
+    np.save("data/processed/fads_shared_eur_idx.npy", idx_eur)
+    np.save("data/processed/fads_shared_eas_idx.npy", idx_eas)
     
