@@ -26,7 +26,6 @@ def find_shared_variant_ids():
 if __name__ == "__main__":
     shared_ids, idx_eas, idx_eur = find_shared_variant_ids()
 
-    np.save("data/processed/fads_shared_variant_ids.npy", shared_ids)
-    np.save("data/processed/fads_shared_eur_idx.npy", idx_eur)
-    np.save("data/processed/fads_shared_eas_idx.npy", idx_eas)
+    np.savez('data/processed/fads_shared_alignment', ids = shared_ids, idx_eas = idx_eas, idx_eur = idx_eur)
+
     

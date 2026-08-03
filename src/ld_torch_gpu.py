@@ -64,6 +64,3 @@ def time_decomposed(G):
 
 
     return total_elapsed_time, separated_times
-
-
-
