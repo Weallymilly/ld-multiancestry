@@ -2,7 +2,7 @@ import numpy as np
 from src.ld_torch_gpu import ld_torch_gpu
 
 if __name__ == "__main__":
-    archive = np.load('data/processed/fads_shared_alignment.npy.npz')
+    archive = np.load('data/processed/fads_shared_alignment.npz')
 
     shared_ids, idx_eas, idx_eur = archive['ids'], archive['idx_eas'], archive['idx_eur']
 
