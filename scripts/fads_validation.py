@@ -15,18 +15,22 @@ def load_aligned():
     ids = archive['ids']
 
     #Gives pairwise kb positions of ids
-    ids = np.abs(ids[:, None] - ids[None, :])/1000
+    ids_dis = np.abs(ids[:, None] - ids[None, :])/1000
 
-    return eas_ld, eur_ld, ids
+    return eas_ld, eur_ld, ids_dis
 
-def flatten_to_pairs(eas_ld, eur_ld, ids):
+def flatten_to_pairs(eas_ld, eur_ld, ids_dis):
     iu = np.triu_indices(eas_ld.shape[0], k=1)
 
     eas_r2 = eas_ld[iu]**2
     eur_r2 = eur_ld[iu]**2
-    dist_kb = ids[iu]
 
-    return eas_r2, eur_r2, dist_kb
+    if ids_dis is not None:
+        dist_kb = ids_dis[iu]
+
+        return eas_r2, eur_r2, dist_kb
+
+    return eas_r2, eur_r2
 
 def summary_stats(eas_r2, eur_r2):
 
@@ -81,8 +85,8 @@ def discordance(eas_r2, eur_r2, strong=0.8, weak=0.2):
 if __name__ == "__main__":
     bins = [(0,5), (5,10), (10,25), (25,50), (50,100), (100,270)] #bin sizes in kb
 
-    eas_ld, eur_ld, ids = load_aligned()
-    eas_r2, eur_r2, dist_kb = flatten_to_pairs(eas_ld, eur_ld, ids)
+    eas_ld, eur_ld, ids_dis = load_aligned()
+    eas_r2, eur_r2, dist_kb = flatten_to_pairs(eas_ld, eur_ld, ids_dis)
 
     mean_eas_r2, mean_eur_r2, frac_eas, frac_eur = summary_stats(eas_r2, eur_r2)
 
@@ -110,8 +114,8 @@ if __name__ == "__main__":
             "shared_strong_pair": strong_count,
             "eas_strong_eur_weak_pairs": only_eas_count,
             "eur_strong_eas_weak_pairs": only_eur_count,
-            "r_correlation": corr,
-            "r2_correlation": corr**2,
+            "corr_r2_between_pops": corr,
+            "frac_r2_variance_shared": corr**2,
             "strong_threshold": 0.8,
             "weak_threshold": 0.2
         }
