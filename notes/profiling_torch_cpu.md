@@ -1,5 +1,5 @@
 # Profiling Results from the PyTorch CPU approach
-**Date: July 17, 2026
+**Date:** July 17, 2026
 
 ## Main Points
 

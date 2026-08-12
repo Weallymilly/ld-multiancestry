@@ -1,6 +1,6 @@
 # IMPACT: Genomic Annotation of Cell-State-Specific Regulatory Elements Inferred from the Epigenome of Bound Transcription Factors
-** DOI: 10.1016/j.ajhg.2019.03.012 ** 
-** Read:** June 2, 2026
+**DOI: 10.1016/j.ajhg.2019.03.012** 
+**Read:** June 2, 2026
 
 ## 1. Core Claim
 The IMPACT model provides a means of functional annotation of cell-state specific regulatory elements with epigenomic footprint and transcription factor (TF) binding as inputs. The key methodological insight is the incorporation of epigenomic information as features while retaining interpretability of weights in an elastic net regularization model. Importantly, IMPACT provides insight to disease mechanism by annotating SNPs with a functional prior probability: for example, "top 5% of CD4+ Treg IMPACT regulatory elements capture 85.7% of RA h2", where "the average RA h2 captured by compared CD4+ T histone marks is 42.3%" - IMPACT-annotated elements are highly enriched for trait heritability in the relevant cell type. 

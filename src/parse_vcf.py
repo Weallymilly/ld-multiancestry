@@ -1,6 +1,6 @@
-import cyvcf2, numpy as np
+import numpy as np
 from cyvcf2 import VCF
-
+#Region chosen as : chr11 61,700,000-61,970,000 extracted with bcftools
 
 def parse_vcf_raw(vcf_path):
     vcf_path = VCF(vcf_path)

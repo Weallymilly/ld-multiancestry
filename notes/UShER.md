@@ -1,7 +1,7 @@
 # Ultrafast Sample placement on Existing tRees (UShER) enables real-time phylogenetics for the SARS-CoV-2 pandemic
-** https://doi.org/10.1038/s41588-021-00862-7 **
-** Read:** June 5, 2026
-** Repo:** github.com/yatisht/usher
+**https://doi.org/10.1038/s41588-021-00862-7**
+**Read:** June 5, 2026
+**Repo:** github.com/yatisht/usher
 
 ## 1. Core Claim
 Modelling the phylogenetic relationship in rapidly evolving specimen, such as viruses, is important for genomic contact tracing. Before UShER, real-time classification of viral-sequence samples was impossible because of algorithms/methods that were too time and memory inefficient to enable real-time classfication. UShER proved that by using MAT - a more practical data structure, bioinformatic analysis can be done in seconds rather than hours or days.

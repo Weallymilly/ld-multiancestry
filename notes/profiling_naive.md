@@ -1,5 +1,5 @@
 # Profiling Results from the naive approach
-**Date: July 10, 2026
+**Date:** July 10, 2026
 
 ## Main Points
 I ran ld_naive.py with a 200 sample x 200 variant random, unseeded matrix input. With a total runtime of 0.414 seconds, 413 function calls. In this, the function ld_naive itself took 0.413s with 1 call, attributing to roughly 99.8% of the total runtime. The built-in method Summation took up the 0.001s of the total time, orders of magnitudes smaller than the ld_naive function itself and larger than the other operations. The function has a time complexity of $ O(V^2 S) $. The loop does over 1 million scalar iterations: there are 200 variants and 200 samples to standardize, then a pairwise correlation operation computed for each pair. From that the naive implementation uses Python scalar objects and loops, we know that overhead exists in each iteration for interpreter dispatch and object allocation indexing; by comparison, vectorized operations used in this the standardization step (e.g., G**2) utilize compiled C through NumPy, reducing the interpreter dispatch overhead. From this knowledge, we can infer that the majority of the runtime accumulated is from the Python loops themselves and not the initial standardization step. 

@@ -1,6 +1,6 @@
 # Accurate, scalable, and fully automated inference of species trees from raw genome assemblies using ROADIES
-** [DOI: 10.1016/j.ajhg.2019.03.012](https://doi.org/10.1073/pnas.250055312) ** 
-** Read:** July 9, 2026
+**[DOI: 10.1016/j.ajhg.2019.03.012](https://doi.org/10.1073/pnas.250055312)** 
+**Read:** July 9, 2026
 
 ## Main Ideas
 - ROADIES infers species trees directly from genome assemblies through an automatic pipeline

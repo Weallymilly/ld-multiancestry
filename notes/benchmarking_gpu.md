@@ -1,5 +1,5 @@
 # Benchmarking Results for GPU
-**Date: July 29, 2026
+**Date:** July 29, 2026
 
 ## Results and Discussion
 I ran the timing benchmark for the GPU implementation on larger variant windows then for the CPU, numpy, and naive approaches. Namely, as seen in benchmark_gpu.py, window sizes of [5000, 8000, 10000, 15000, 20000, 30000, 40000] - still at 600 samples. Figure 2 shows a smooth increase from 5000 to 20000 variants, then a sharp spike in runtime from 20000 to 30000 variants: elapsed time rose from 0.038s to 0.370s. Figure 2 is created without the .cpu() transfer_out step; Figures 3 and 4 are created with the transfer_out step in place. Figures 3 and 4 are aimed to show the discrepancy in transfer_in and transfer_out times in relation to the compute time. 
