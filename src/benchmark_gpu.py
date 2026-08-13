@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     #Still using big-n to check for transfer times
 
-    window_sizes = [5000, 8000, 10000, 15000, 20000, 30000, 40000]
+    window_sizes = [5000, 8000, 10000, 15000, 20000, 30000]
     n_samples = 600
 
     df_gpu = decomposed_benchmark(window_sizes, n_samples)
@@ -70,7 +70,7 @@ if __name__ == "__main__":
     plt.title("Decomposed GPU runtime (log-log)", fontdict={'size': 8})
     plt.legend()
 
-    plt.savefig("figs/fig3_gpu_decomposed.png", dpi=300, bbox_inches='tight')
+    plt.savefig("figs/fig3_gpu_decomposed_v2.png", dpi=300, bbox_inches='tight')
 
     y_cols = ['transfer_in_time', 'compute_time', 'transfer_out_time']
     df_percent = df_gpu[y_cols].div(df_gpu["total_time"], axis=0) * 100
@@ -87,6 +87,6 @@ if __name__ == "__main__":
 
     #The figure produced, Fig4, may have bars not summing to 100% due to rounding errors in the percentage calculations. That is because of the grouby step taking the minimum of each time component, which can lead to slight discrepancies when calculating percentages.
 
-    plt.savefig("figs/fig4_gpu_dec_stacked.png", dpi=300, bbox_inches='tight')
+    plt.savefig("figs/fig4_gpu_dec_stacked_v2.png", dpi=300, bbox_inches='tight')
 
-    df_gpu.to_csv("results/gpu_decomposed.csv")
+    df_gpu.to_csv("results/gpu_decomposed_v2.csv")
