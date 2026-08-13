@@ -66,3 +66,56 @@ def time_decomposed(G):
 
 
     return total_elapsed_time, separated_times
+
+def transfer_chunked (ld_gpu, out_cpu, staging, rows_per_chunk):
+    device = torch.device('cuda')
+    
+    with torch.inference_mode():
+        G = torch.tensor(ld_gpu, dtype=torch.float32)
+    
+        events = {
+            "start_in": torch.cuda.Event(enable_timing=True),
+            "end_in": torch.cuda.Event(enable_timing=True),
+            "start_compute": torch.cuda.Event(enable_timing=True),
+            "end_compute": torch.cuda.Event(enable_timing=True),
+            "start_exit": torch.cuda.Event(enable_timing=True),
+            "end_exit": torch.cuda.Event(enable_timing=True)
+        }
+    
+        events["start_in"].record(stream=None)
+        g_GPU = G.to(device)
+        events["end_in"].record(stream=None)
+    
+        events["start_compute"].record(stream=None)
+        means = torch.mean(g_GPU, dim = 1)
+        std = torch.std(g_GPU, dim = 1, correction = 1)
+        g_std = (g_GPU - means[:, None])/std[:, None]
+            
+        ld_matrix = g_std @ g_std.T
+        ld_matrix /= (g_GPU.shape[1]-1)
+    
+        events["end_compute"].record(stream=None)
+    
+        events["start_exit"].record(stream=None)
+        for i in range(0, G.shape[0], rows_per_chunk):
+            i_end = min(i+rows_per_chunk, G.shape[0])
+
+            h = i_end - i
+
+            staging[:h,:].copy_(ld_matrix[i:i_end, :], non_blocking=True)
+            torch.cuda.synchronize()
+            
+            out_cpu[i:i_end,:].copy_(staging[:h, :])
+
+        events["end_exit"].record(stream=None)
+        events["end_exit"].synchronize()
+    
+        total_elapsed_time = events["start_in"].elapsed_time(events["end_exit"])/1000
+    
+        separated_times = [events["start_in"].elapsed_time(events["end_in"]), events["start_compute"].elapsed_time(events["end_compute"]), events["start_exit"].elapsed_time(events["end_exit"])]
+    
+        separated_times = [x/1000 for x in separated_times]
+    
+    
+    return total_elapsed_time, separated_times
+
