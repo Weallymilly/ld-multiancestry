@@ -28,6 +28,7 @@ def time_decomposed(G):
 
     with torch.inference_mode():
         G = torch.tensor(G, dtype=torch.float32)
+        ld_cpu = torch.empty((G.shape[0], G.shape[0]), dtype=torch.float32, device = 'cpu', pin_memory = True)
 
         events = {
             "start_in": torch.cuda.Event(enable_timing=True),
@@ -47,12 +48,13 @@ def time_decomposed(G):
         std = torch.std(g_GPU, dim = 1, correction = 1)
         g_std = (g_GPU - means[:, None])/std[:, None]
         
-        ld_matrix = g_std @ g_std.T/(g_GPU.shape[1]-1)
+        ld_matrix = g_std @ g_std.T
+        ld_matrix /= (g_GPU.shape[1]-1)
 
         events["end_compute"].record(stream=None)
 
         events["start_exit"].record(stream=None)
-        ld_matrix = ld_matrix.cpu()
+        ld_cpu.copy_(ld_matrix, non_blocking=True)
         events["end_exit"].record(stream=None)
         events["end_exit"].synchronize()
 
