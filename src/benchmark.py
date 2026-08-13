@@ -1,9 +1,9 @@
 import time, numpy as np, pandas as pd, matplotlib.pyplot as plt, seaborn as sns
 import torch
-from ld_numpy import ld_numpy
-from ld_naive import ld_naive
-from ld_torch_cpu import ld_torch_cpu
-from ld_torch_gpu import ld_torch_gpu
+from .ld_numpy import ld_numpy
+from .ld_naive import ld_naive
+from .ld_torch_cpu import ld_torch_cpu
+from .ld_torch_gpu import ld_torch_gpu
 
 #Use sample size of ~633 matching 633 from EUR
 
