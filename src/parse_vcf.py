@@ -6,6 +6,7 @@ def parse_vcf_raw(vcf_path):
 
     sample_ids = vcf_path.samples
     variant_ids = []
+    variant_rsids = []
     ref = []
     alt = []
     
@@ -13,6 +14,7 @@ def parse_vcf_raw(vcf_path):
     
     for variant in vcf_path:
         variant_ids.append(variant.POS)
+        variant_rsids.append(variant.ID)
 
         assert len(variant.ALT) == 1
 
@@ -34,7 +36,7 @@ def parse_vcf_raw(vcf_path):
     G = np.array(G, dtype=float)
     print(G.shape)
 
-    return G, np.array(variant_ids), np.array(sample_ids), np.array(ref), np.array(alt)
+    return G, np.array(variant_ids), np.array(variant_rsids), np.array(sample_ids), np.array(ref), np.array(alt)
 
 
 def compute_missingness(G):
@@ -62,20 +64,21 @@ def compute_maf(G):
 
     return np.array(maf), np.array(alt_freq)
 
-def filter_variants(G, variant_ids, ref, alt, alt_freq, missingness, maf, maf_thres = 0.01, missing_thres = 0.05):
+def filter_variants(G, variant_ids, variant_rsids, ref, alt, alt_freq, missingness, maf, maf_thres = 0.01, missing_thres = 0.05):
 
     #Discards variants with low MAF and high missingness
 
     mask = (maf > maf_thres) & (missingness < missing_thres)
     G_filtered = G[mask]
     variant_ids_filtered = variant_ids[mask]
+    rsids_filtered = variant_rsids[mask]
     ref_filtered  = np.array(ref[mask])
     alt_filtered = np.array(alt[mask])
     alt_freq_filtered = np.array(alt_freq[mask])
 
     print(len(variant_ids_filtered), "variants passed the filter of MAF > 0.01 and missingness < 0.05")
 
-    return  np.array(G_filtered), np.array(variant_ids_filtered), ref_filtered, alt_filtered, alt_freq_filtered
+    return  np.array(G_filtered), np.array(variant_ids_filtered), np.array(rsids_filtered), ref_filtered, alt_filtered, alt_freq_filtered
 
 def impute_mean(G):
 
@@ -92,17 +95,18 @@ if __name__ == "__main__":
 
     for name in ["EAS", "EUR"]:
         vcf_path = VCF(f"data/1kg/fads_{name}.vcf.gz")
-        G, variant_ids, sample_ids, ref, alt = parse_vcf_raw(vcf_path)
+        G, variant_ids, variant_rsids, sample_ids, ref, alt = parse_vcf_raw(vcf_path)
         assert variant_ids.shape == ref.shape == alt.shape
         print("Matrix shape:", G.shape)
 
         missingness = compute_missingness(G)
         maf, alt_freq = compute_maf(G)
-        G_filtered, variant_ids_filtered, ref_filtered, alt_filtered, alt_freq_filtered = filter_variants(G, variant_ids, ref, alt, alt_freq, missingness, maf)
+        G_filtered, variant_ids_filtered, rsids_filtered, ref_filtered, alt_filtered, alt_freq_filtered = filter_variants(G, variant_ids, variant_rsids, ref, alt, alt_freq, missingness, maf)
         G_imputed = impute_mean(G_filtered)
 
         np.save(f"data/processed/fads_{name}_G_imputed.npy", G_imputed)
         np.save(f"data/processed/fads_{name}_variant_ids.npy", variant_ids_filtered)
+        np.save(f"data/processed/fads_{name}_variant_rsids.npy", rsids_filtered)
         np.save(f"data/processed/fads_{name}_ref.npy", ref_filtered)
         np.save(f"data/processed/fads_{name}_alt.npy", alt_filtered)
         np.save(f"data/processed/fads_{name}_alt_freq.npy", alt_freq_filtered)
